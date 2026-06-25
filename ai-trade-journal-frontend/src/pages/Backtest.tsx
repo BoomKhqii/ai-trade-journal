@@ -2,10 +2,11 @@ function Backtest() {
     return (
         <>
             <div>
-                <h1>equrtidg</h1>
-                <p>
-                    DFXGDFHFH
-                </p>
+                equity curve
+                    - different stocks equity curve
+                - combination of all stocks equity curve
+                pnl
+                2 pie graph of all stock's profi t and loss
             </div>
         </>
     );

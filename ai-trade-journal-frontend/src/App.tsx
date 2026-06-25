@@ -2,6 +2,7 @@ import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import Backtest from './pages/Backtest';
+import Accounts from './pages/Accounts';
 
 function App() {
     return (
@@ -9,6 +10,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/backtest" element={<Backtest />} />
+                <Route path="/account" element={<Accounts />} />
             </Routes>
         </BrowserRouter>
     );

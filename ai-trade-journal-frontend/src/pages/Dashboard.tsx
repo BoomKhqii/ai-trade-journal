@@ -19,21 +19,6 @@ function Dashboard() {
 
     const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-    const colors = [
-        '#16a085',
-        '#1abc9c',
-        '#c0392b',
-        '#27ae60',
-        '#FF6860',
-        '#f39c12',
-        '#f1c40f',
-        '#e67e22',
-        '#2ecc71',
-        '#e74c3c',
-        '#d35400',
-        '#2c3e50',
-    ];
-
     const today = new Date();
 
     const [currentDate, setCurrentDate] = useState(
@@ -76,66 +61,83 @@ function Dashboard() {
         );
     }
 
-    const monthColor = colors[month];
+    //const monthColor = colors[month];
+    const monthColor = '#808080';
 
     return (
-        <div id="calendar">
-            <div id="calendar_header" style={{ backgroundColor: monthColor }}>
-                <button onClick={previousMonth} className="calendar_arrow">
-                    ‹
-                </button>
+        <>
+            <div id="container-dashboard">
+                <div id="stats-bar">
+                    <h4>Initial balance: 1700</h4>
+                    <h4>Drawdown: -%8.56</h4>
+                    <h4>Profitable Trades: 28.5% 67/345</h4>
+                    <h4>Sharpe Ratio: 0.675</h4>
+                </div>
+                <div id="calendar">
+                    <div id="calendar_header" style={{ backgroundColor: monthColor }}>
+                        <button onClick={previousMonth} className="calendar_arrow">
+                            ‹
+                        </button>
 
-                <h1>
-                    {monthNames[month]} {year}
-                </h1>
+                        <h1>
+                            {monthNames[month]} {year}
+                        </h1>
 
-                <button onClick={nextMonth} className="calendar_arrow">
-                    ›
-                </button>
-            </div>
-
-            <div id="calendar_weekdays">
-                {weekDays.map((day) => (
-                    <div key={day} style={{ color: monthColor }}>
-                        {day}
+                        <button onClick={nextMonth} className="calendar_arrow">
+                            ›
+                        </button>
                     </div>
-                ))}
-            </div>
 
-            <div id="calendar_content">
-                {calendarDays.map((day, index) => {
-                    if (day === null) {
-                        return <div key={index} className="calendar_day blank"></div>;
-                    }
-
-                    const key = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-
-                    const calendarNotes: Record<string, string[]> = {
-                        '2026-06-22': ['Backtest review', 'AUS200 ORB'],
-                        '2026-06-25': ['Check journal'],
-                        '2026-06-29': ['Strategy update'],
-                    };
-
-                    const notes = calendarNotes[key] || [];
-
-                    return (
-                        <div
-                            key={index}
-                            className={`calendar_day ${isToday(day) ? 'today' : ''}`}
-                            style={isToday(day) ? { backgroundColor: monthColor } : {}}
-                        >
-                            <span className="day_number">{day}</span>
-
-                            <div className="day_notes">
-                                {notes.map((note) => (
-                                    <p key={note}>{note}</p>
-                                ))}
+                    <div id="calendar_weekdays">
+                        {weekDays.map((day) => (
+                            <div key={day} style={{ color: monthColor }}>
+                                {day}
                             </div>
-                        </div>
-                    );
-                })}
+                        ))}
+                    </div>
+
+                    <div id="calendar_content">
+                        {calendarDays.map((day, index) => {
+                            if (day === null) {
+                                return <div key={index} className="calendar_day blank"></div>;
+                            }
+
+                            const key = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+                            const calendarNotes: Record<string, string[]> = {
+                                '2026-06-22': ['Backtest review', 'AUS200 ORB'],
+                                '2026-06-25': ['Check journal'],
+                                '2026-06-29': ['Strategy update'],
+                            };
+
+                            const notes = calendarNotes[key] || [];
+
+                            return (
+                                <div
+                                    key={index}
+                                    className={`calendar_day ${isToday(day) ? 'today' : ''}`}
+                                    style={isToday(day) ? { backgroundColor: monthColor } : {}}
+                                >
+                                    <span className="day_number">{day}</span>
+
+                                    <div className="day_notes">
+                                        {notes.map((note) => (
+                                            <p key={note}>{note}</p>
+                                        ))}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+                <div id="upload-floor">
+                    <form>
+                        <label id="fileUpload">Uploads file</label>
+                        <input type="file" id="fileUpload" />
+                    </form>
+                </div>
             </div>
-        </div>
+        </>
     );
 }
 
