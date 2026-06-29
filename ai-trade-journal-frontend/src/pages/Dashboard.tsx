@@ -68,10 +68,12 @@ function Dashboard() {
         <>
             <div id="container-dashboard">
                 <div id="stats-bar">
-                    <h4>Initial balance: 1700</h4>
-                    <h4>Drawdown: -%8.56</h4>
-                    <h4>Profitable Trades: 28.5% 67/345</h4>
-                    <h4>Sharpe Ratio: 0.675</h4>
+                    <h4>
+                        <b>Initial balance:</b> 1700<br/>
+                        <b>Drawdown:</b> -%8.56<br/>
+                        <b>Profitable Trades:</b> 28.5% 67/345<br/>
+                        <b>Sharpe Ratio:</b> 0.675<br/>
+                    </h4>
                 </div>
                 <div id="calendar">
                     <div id="calendar_header" style={{ backgroundColor: monthColor }}>
@@ -132,7 +134,7 @@ function Dashboard() {
                 </div>
                 <div id="upload-floor">
                     <form>
-                        <label id="fileUpload">Uploads file</label>
+                        <label htmlFor="fileUpload">Upload file</label>
                         <input type="file" id="fileUpload" />
                     </form>
                 </div>
