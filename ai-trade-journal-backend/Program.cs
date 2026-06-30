@@ -1,5 +1,28 @@
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+var app = builder.Build();
+
+app.UseCors("AllowReactFrontend");
+
+app.MapControllers();
+
+app.Run();
+
+/*
+var builder = WebApplication.CreateBuilder(args);
+
 var reactAppPolicy = "ReactAppPolicy";
 
 builder.Services.AddCors(options =>
@@ -29,7 +52,10 @@ app.MapGet("/api/health", () =>
     {
         message = "C# backend is connected to React",
         status = "Running"
+
+
     });
 });
 
 app.Run();
+*/
