@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './css/Dashboard.css';
 
 import {
@@ -19,6 +19,34 @@ import {
 
 
 function Dashboard() {
+
+    const [winRate, setWinRate] = useState(0);
+    const [maximumDrawdown, setMaximumDrawdown] = useState(0);
+    const [sharpeRatio, setSharpeRatio] = useState(0);
+    const [initialBalance, setInitialBalance] = useState(0);
+    const [loading, setLoading] = useState(true);
+
+
+    useEffect(() => {
+        // Fetch data from the .NET backend API
+        fetch('http://localhost:5000/api/backtest')
+            .then((response) => response.json())
+            .then((data) => {
+                // Destructure and assign multiple variables from the JSON object
+                setWinRate(data.winRate);
+                setMaximumDrawdown(data.maximumDrawdown);
+                setSharpeRatio(data.sharpeRatio);
+                setInitialBalance(data.initialBalance);
+                setLoading(false);
+            })
+            /*
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+                setLoading(false);
+            });*/
+    }, []);
+
+    
 
     const equityData = [
         { trade: 'T1', AUS200: 1700, SPX500: 1700, NAS100: 1700, Total: 5100 },
@@ -72,6 +100,20 @@ function Dashboard() {
         },
     ];
 
+   /*
+    const [marketResults, setMarketResults] = useState([]);
+
+    useEffect(() => {
+        fetch("http://localhost:5000/api/marketresults")
+            .then((response) => response.json())
+            .then((data) => {
+                setMarketResults(data);
+            })
+            .catch((error) => {
+                console.error("Failed to fetch market results:", error);
+            });
+    }, []);
+    */
     const pieColors = ['#22c55e', '#ef4444', '#94a3b8'];
 
     const monthNames = [
@@ -117,6 +159,8 @@ function Dashboard() {
         calendarDays.push(null);
     }
 
+    if (loading) return <p>Loading data...</p>;
+
     function previousMonth() {
         setCurrentDate(new Date(year, month - 1, 1));
     }
@@ -141,10 +185,10 @@ function Dashboard() {
             <div id="container-dashboard">
                 <div id="stats-bar">
                     <h4>
-                        <b>Initial balance:</b> 1700<br/>
-                        <b>Drawdown:</b> -%8.56<br/>
-                        <b>Profitable Trades:</b> 28.5% 67/345<br/>
-                        <b>Sharpe Ratio:</b> 0.675<br/>
+                        <b>Initial balance:</b> { initialBalance }<br/>
+                        <b>Drawdown:</b> -%{ maximumDrawdown }<br/>
+                        <b>Profitable Trades:</b> { winRate}% 67/345<br/>
+                        <b>Sharpe Ratio:</b> { sharpeRatio }<br/>
                     </h4>
                 </div>
                 <div id="calendar">
@@ -256,21 +300,21 @@ function Dashboard() {
                             <p>Profit, loss, and break-even trades per market</p>
 
                             <div className="donut-grid">
-                                {marketResults.map((market) => (
-                                    <div className="donut-card" key={market.market}>
-                                        <h3>{market.market}</h3>
+                                {marketResults.map((markets) => (
+                                    <div className="donut-card" key={markets.market}>
+                                        <h3>{markets.market}</h3>
 
                                         <ResponsiveContainer width="100%" height={190}>
                                             <PieChart>
                                                 <Pie
-                                                    data={market.data}
+                                                    data={markets.data}
                                                     dataKey="value"
                                                     nameKey="name"
                                                     innerRadius={45}
                                                     outerRadius={70}
                                                     paddingAngle={3}
                                                 >
-                                                    {market.data.map((_, index) => (
+                                                    {markets.data.map((_, index) => (
                                                         <Cell key={index} fill={pieColors[index]} />
                                                     ))}
                                                 </Pie>
