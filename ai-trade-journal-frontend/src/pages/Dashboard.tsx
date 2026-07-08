@@ -46,7 +46,42 @@ function Dashboard() {
             });*/
     }, []);
 
-    
+
+    const [file, setFile] = useState<File | null>(null);
+
+      const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+          setFile(e.target.files[0]);
+        }
+      };
+
+    const handleUpload = async () => {
+        if (!file) {
+            console.log("No file selected.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const result = await fetch("http://localhost:5000/api/upload", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (!result.ok) {
+                const errorText = await result.text();
+                console.error("Upload failed:", errorText);
+                return;
+            }
+
+            const data = await result.json();
+            console.log("Upload successful:", data);
+        } catch (error) {
+            console.error("Upload error:", error);
+        }
+    };
 
     const equityData = [
         { trade: 'T1', AUS200: 1700, SPX500: 1700, NAS100: 1700, Total: 5100 },
@@ -255,8 +290,25 @@ function Dashboard() {
                         </label>
 
                         <div className="upload-box">
-                            <input type="file" id="fileUpload" />
+                            <input type="file" id="fileUpload" onChange={handleFileChange} />
                         </div>
+                        {file && (
+                            <section>
+                                File details:
+                                <ul>
+                                    <li>Name: {file.name}</li>
+                                    <li>Type: {file.type}</li>
+                                    <li>Size: {file.size} bytes</li>
+                                </ul>
+                            </section>
+                        )}
+
+                        {file && (
+                            <button
+                                onClick={handleUpload}
+                                className="submit"
+                            >Upload a file</button>
+                        )}
                     </form>
 
                     <div className="charts-dashboard">

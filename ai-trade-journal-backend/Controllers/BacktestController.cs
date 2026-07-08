@@ -13,7 +13,7 @@ public class BacktestController : ControllerBase
 		{
 			winRate = 45,
 			maximumDrawdown = 20,
-			sharpeRatio = 0.342,
+			sharpeRatio = 0.342m,
 			initialBalance = 1750
 		};
 

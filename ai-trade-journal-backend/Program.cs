@@ -14,9 +14,20 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// app.UseHttpsRedirection(); // keep disabled if your frontend uses http://localhost
+
 app.UseCors("AllowReactFrontend");
 
 app.MapControllers();
+
+app.MapGet("/api/health", () =>
+{
+    return Results.Ok(new
+    {
+        message = "C# backend is connected to React",
+        status = "Running"
+    });
+});
 
 app.Run();
 
